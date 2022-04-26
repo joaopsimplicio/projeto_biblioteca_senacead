@@ -1,21 +1,46 @@
 @model List<Livro>
 @{
     ViewData["Title"] = "Listagem de Livros";
+    int filtroPorPag = int.Parse(ViewData["livrosPorPag"].ToString());
+    int paginaAtual = int.Parse(ViewData["paginaAtual"].ToString());
+    int numLivrosPorPag = (Model.Count < filtroPorPag ? Model.Count : filtroPorPag);
+    int numTotalPag = Model.Count / (numLivrosPorPag == 0 ? numLivrosPorPag = 1 : numLivrosPorPag) + (Model.Count %
+    numLivrosPorPag == 0 ? 0 : 1);
 }
+
 <div class="row">
     <div class="col-md-12">
-    <form class="form-inline" method="POST">
-        <div class="form-group mb-2">
-            <select name="TipoFiltro" class="form-control">
-                <option value="Autor">Autor</option>
-                <option value="Titulo">Título</option>
-            </select>
-        </div>
-        <div class="form-group mb-2 mx-sm-3">
-            <input type="text" placeholder="Filtro" name="Filtro" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Pesquisar</button>
-    </form>
+        <form class="form-inline" method="POST">
+            <div class="form-group mb-2">
+                <select name="TipoFiltro" class="form-control">
+                    <option value="Autor">Autor</option>
+                    <option value="Titulo">Título</option>
+                </select>
+            </div>
+            <div class="form-group mb-2 mx-sm-3">
+                <input type="text" placeholder="Filtro" name="Filtro" class="form-control" />
+            </div>
+
+            <div>
+                <select name="itensPorPag" id="itensPorPag">
+                    <option value="10">10</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="@Model.Count">Todos</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-2">Pesquisar</button>
+
+            <div id="SeletorPaginas">
+                <span>Página:</span>
+
+                @for (int i = 1; i <= numTotalPag; i++)
+                {
+                    <span><a href="/Livro/Listagem?paginaAtual=@i">@i</a></span>
+                }
+            </div>
+        </form>
     </div>
 </div>
 
@@ -23,29 +48,33 @@
     <div class="col-md-12">
         @if (Model.Count > 0)
         {
-        <table class="table table-striped"> 
-            <thead>
-                <tr><th>Id</th>
-                <th>Titulo</th>
-                <th>Autor</th>
-                <th>Ano</th>
-                <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(Livro l in Model)
-                {
-                <tr>
-                    <td>@l.Id</td>
-                    <td>@l.Titulo</td>
-                    <td>@l.Autor</td>
-                    <td>@l.Ano</td>
-                    <td><a href="/Livro/Edicao/@l.Id">Editar</a></td>
-                </tr>
-                }
-            </tbody>
-        </table>
-        } else {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titulo</th>
+                        <th>Autor</th>
+                        <th>Ano</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = (paginaAtual - 1) * numLivrosPorPag; i < (numLivrosPorPag * paginaAtual < Model.Count
+                   ? numLivrosPorPag * paginaAtual : Model.Count); i++)
+                    {
+                        <tr>
+                            <td>@Model[i].Id</td>
+                            <td>@Model[i].Titulo</td>
+                            <td>@Model[i].Autor</td>
+                            <td>@Model[i].Ano</td>
+                            <td><a href="/Livro/Edicao/@Model[i].Id">Editar</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
             <h3>Livro ou autor não encontrado</h3>
         }
     </div>
