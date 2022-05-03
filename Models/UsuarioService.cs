@@ -31,12 +31,14 @@ namespace Biblioteca.Models
                 u.Login = userEdit.Login;
                 u.Senha = userEdit.Senha;
                 u.Tipo = userEdit.Tipo;
+                bc.SaveChanges();
             }
         }
 
         public void Excluir(int id) {
             using (BibliotecaContext bc = new BibliotecaContext()) {
                 bc.Usuarios.Remove(bc.Usuarios.Find(id));
+                bc.SaveChanges();
             }
         }
 

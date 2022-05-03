@@ -1,19 +1,13 @@
 @model Usuario
-@{
-    ViewData["Title"] = "Edição de Usuário";
-}
 
 <h1>Realize a Edição do Usuário</h1>
 
-<form action="Edicao" method="POST" class="col-md-4">
-    <label class="form-group">Nome:</label>
+<form action="Edicao" method="post">
     <input type="text" name="Nome" id="userNome" value="@Model.Nome">
-    <label class="form-group">Login</label>
     <input type="text" name="Login" id="userLogin" value="@Model.Login">
-    <label class="form-group">Senha</label>
     <input type="text" name="Senha" id="userSenha" value="@Model.Senha">
 
-    <select name="Tipo" id="userTipo">
+    <select name="tipo" id="userTipo">
         <option value="@Usuario.Admin">Administrador</option>
         <option value="@Usuario.Padrao">Padrão</option>
     </select>

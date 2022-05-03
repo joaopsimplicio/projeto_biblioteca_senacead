@@ -14,13 +14,11 @@
     </thead>
 
     <tbody>
-        @foreach (Usuario u in Model)
-        {
+        @foreach (Usuario u in Model) {
             <tr>
                 <td>@u.Nome</td>
                 <td>@u.Login</td>
-                @if (u.Tipo == Usuario.Admin)
-                {
+                @if (u.Tipo == Usuario.Admin) {
                     <td>Administrador</td>
                 }
                 else
@@ -28,8 +26,8 @@
                     <td>Padrão</td>
                 }
 
-                <td><a href="Edicao?id=@u.Id">Editar</a></td>
-                <td><a href="Exclusao?id=@u.Id">Excluir</a></td>
+                <td><a href="/Usuario/Edicao?Id=@u.Id">Editar</a></td>
+                <td><a href="/Usuario/Exclusao?Id=@u.Id">Excluir</a></td>
             </tr>
         }
     </tbody>
